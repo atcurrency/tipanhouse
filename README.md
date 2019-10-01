@@ -17,6 +17,6 @@ Simply by standing on the elevator platform, a new floor of the hotel will be cr
 
 Rooms are actually wider than the lobby, a full 14 meters out of the allowed 16 meters, overhanging the lobby level to allow for pedestrian traffic and virtual car parking.
 
-Perhaps a person who does own virtual real estate can maintain a room for a time based on an escrow shared between the hotel and the guest, thus allowing the guest to leave and come back to their own room, with their own untouched encrypted belongings such as many online games allow players a virtual room or allow them to buy virtual land.
+Perhaps a person who doesn't own virtual real estate can maintain a room for a time based on an escrow shared between the hotel and the guest, thus allowing the guest to leave and come back to their own room, with their own untouched encrypted belongings such as many online games allow players a virtual room or allow them to buy virtual land.
 
 Modules such as conference rooms and other useful modules/floors so may be a good place to rent out for those interested in meeting in Decentraland.
