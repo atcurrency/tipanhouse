@@ -5,6 +5,8 @@ Decentralized hotel prototype for Decentraland. Fully programmatic.  No 3d model
 
 Code needs cleanup, as this was done in a marathon coding session using a somewhat new technology stack for me. Top prommatic building development tip:  don't try to guestimate door measurements at 2 in the morning.
 
+Requires: decentraland-ecs-utils (not included here)
+
 Why a decentralized hotel? Well, there is decentralized land and there are decentralized houses, so why not a hotel?
 
 The hotel will create a new floor for your suite by simply *clicking either the golden elevator platform or the golden rectangular rod in the lobby*. 
