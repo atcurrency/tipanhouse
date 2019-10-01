@@ -1,7 +1,7 @@
 
 ![Tipan Hoouse Pre-Alpha](media/tipanhouseoutside.png)
 
-Decentralized hotel prototype for Decentraland. Fully programmitic.  No 3d models needed.
+Decentralized hotel prototype for Decentraland. Fully programmatic.  No 3d models needed.
 
 Why a decentralized hotel? Well, there is decentralized land and there are decentralized houses, so why not a hotel?
 
