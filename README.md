@@ -5,7 +5,7 @@ This is a concept for a code-only, no imported 3D models needed, decentralized l
 
 Why a decentralized hotel? Well, there is decentralized land and there are decentralized houses, so why not a hotel?
 
-The hotel will create a new floor for your suite by simply >clicking either the golden elevator platform or the golden rectangular rod in the lobby<. The elevator is in "open house" mode and simply travels up and down. It's having issues and should be repaired shortly. I've called the virtual elevator repair guy.
+The hotel will create a new floor for your suite by simply *clicking either the golden elevator platform or the golden rectangular rod in the lobby*. The elevator is in "open house" mode and simply travels up and down. It's having issues and should be repaired shortly. I've called the virtual elevator repair guy.
 
 The maximum amount of floors you can create seems to be about 4 but I have designed this first version to be "airy" so the floors could be stacked closer together.
 
