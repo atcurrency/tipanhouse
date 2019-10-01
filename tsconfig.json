@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outFile": "./bin/game.js",
+    "allowJs": true,
+    "lib": [
+      "dom",
+      "es5",
+      "scripthost",
+      "dom"
+    ]
+  },
+  "include": ["src/**/*.ts"],
+  "extends": "./node_modules/decentraland-ecs/types/tsconfig.json"
+}
