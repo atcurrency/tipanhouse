@@ -1,7 +1,7 @@
 
 ![Tipan Hoouse Pre-Alpha](media/tipanhouseoutside.png)
 
-This is a concept for a code-only, no imported 3D models needed, decentralized luxury hotel for the Sepetember 2019 Decentraland game jam.
+Decentralized hotel prototype for Decentraland. Fully programmitic.  No 3d models needed.
 
 Why a decentralized hotel? Well, there is decentralized land and there are decentralized houses, so why not a hotel?
 
