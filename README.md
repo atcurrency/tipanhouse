@@ -1,19 +1,19 @@
 
 ![Tipan Hoouse Pre-Alpha](media/tipanhouseoutside.png)
 
-Decentralized hotel prototype for Decentraland. Fully programmatic.  No 3d models needed.
+Fully programmatic Decentralized hotel prototype for Decentraland. Create an entire new floor for yourself by pressing a button.
 
-Code needs cleanup, as this was done in a marathon coding session using a somewhat new technology stack for me. Top prommatic building development tip:  don't try to guestimate door measurements at 2 in the morning.
+*Instructions:*
 
-Requires: decentraland-ecs-utils (not included here)
+Create a new hotel guest floor for yourself by clicking the blue button next to the elevator.  The golden button will call the elevator down if it is on an upper floor.
+
+Stand on the elevator and use the up (green) or down (red) buttons to move. Use the center gold button to stop the elevator.
+
+*Requires:* decentraland-ecs-utils (not included here)
+
+*Description:*
 
 Why a decentralized hotel? Well, there is decentralized land and there are decentralized houses, so why not a hotel?
-
-The hotel will create a new floor for your suite by simply *clicking either the golden elevator platform or the golden rectangular rod in the lobby*. 
-
-Beware the elevator is in "open house" mode and simply travels up and down. It's having issues and should be repaired shortly, so you may find some jumping on and off of it useful.
-
-The maximum amount of floors you can create seems to be about 4 but I have designed this first version to be "airy" so the floors could be stacked closer together.
 
 The lobby features clickable doors that rotate nicely in the center for a more wide open effect, and there are 3 meters of free walking space around the lobby level.
 
