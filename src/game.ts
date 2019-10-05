@@ -18,13 +18,13 @@ log("Material creation functions loaded.");
 
 let greenGlowMat = makeMaterial("#00AA00", .4, .7);
 let redGlowMat = makeMaterial("#AA0000", .4, .7);
-let metalDkStlMat = makeMaterial("#a09ca1", .9, .0);
-let blockMat = makeMaterial("#ccc7ab", 0.2, .5);
+let metalDkStlMat = makeMaterial("#a09ca1", .9, .3);
+let blockMat = makeMaterial("#ccc4a4", 0.2, .5);
 let ceilingMat = makeMaterial("#ccc7ab", 0.2, .5);
 let bridgeMat = makeMaterial("#4d3734", 0.2, .5);
 const greenMetalMat = makeMaterial("#138326", .9, .1);
-const goldMetalMat = makeMaterial("#bfb017", .9, .0);
-const darkMetalMat = makeMaterial("#747051", .9, .0);
+const goldMetalMat = makeMaterial("#bfb017", .9, .2);
+const darkMetalMat = makeMaterial("#747051", .9, .2);
 const redMetalMat = makeMaterial("#830000", .9, .1);
 const blueMetalMat = makeMaterial("#0c1e83", .9, .1);
 let greenMetalTrimMat = makeMaterial("#2f5d31", .9, .0);
@@ -37,9 +37,55 @@ const suiteFloorMaterial = makeMaterial("#c2ac94", .1, .7);
 const suiteWallMaterial = makeMaterial("#aea990", .1, .7);
 const bedMat = makeMaterial("#c1a586", 0, .7);
 const couchMat = makeMaterial("#aea990", 0, .7);
+const canvas = new UICanvas();
+const message = new UIText(canvas);
+message.fontSize = 15;
+message.width = 120;
+message.height = 30;
+message.vAlign = 'bottom';
+message.positionX = -80;
 
 
+function uilog(msg)
+{
+    message.value = msg;
+}
 
+function color4HexAlpha(hcolor, alpha)
+{
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+    let colors = [];
+    if(hcolor.length === 6)
+    {
+        colors[0] = parseInt("0x"+hcolor.substring(0,1));
+        colors[1] = parseInt("0x"+hcolor.substring(2,3));
+        colors[2] = parseInt("0x"+hcolor.substring(4,5));
+
+    }
+    else if(hcolor.length === 7)
+    {
+        colors[0] = parseInt("0x"+hcolor.substring(1,2));
+        colors[1] = parseInt("0x"+hcolor.substring(3,4));
+        colors[2] = parseInt("0x"+hcolor.substring(5,6));
+    }
+
+    r = colors[0]/16;
+    g = colors[1]/16;
+    b = colors[2]/16;
+
+    let newColor = new Color4(r,g,b,alpha);
+    return newColor;
+}
+
+const lobbyDoorGlass1 = color4HexAlpha("#305d32",.5);
+let glassWall = new Material();
+glassWall.transparencyMode = 2;
+glassWall.albedoColor = lobbyDoorGlass1;
+glassWall.metallic = .9;
+glassWall.roughness = .2;
 
 const greenDim = new Color4(.1,.5, .1, .3);
 const greenBrt = new Color4(.4,1, .4, .6);
@@ -118,20 +164,20 @@ log("Ground floor being made...");
 
 const groundFloorBlocks = [];
 
-
-
 let blockDims =
     [
-        [8, .375, 4.5, 10, .75, 3, blockMat], //main floor blocks
-        [4.5, .375, 8, 3, .75, 4, blockMat],
-        [11.5, .375, 8, 3, .75, 4, blockMat],
-        [8, .375, 11.5, 10, .75, 3, blockMat],
+        [8, .5, 4.5, 10, 1, 3, blockMat], //main floor blocks
+        [4.5, .5, 8, 3, 1, 4, blockMat],
+        [11.5, .5, 8, 3, 1, 4, blockMat],
+        [8, .5, 11.5, 10, 1, 3, blockMat],
 
         [8, 1.25, 8, 2, .25, 2, blockMat], // el platform
-        [8, 1.25, 8, 2, .25, 2, blockMat], // el upper platform
 
+        [8, 5.1, 4.5, 10, .2, 3, blockMat], // main floor ceiling
+        [4.5, 5.1, 8, 3, .2, 4, blockMat], //
+        [11.5, 5.1, 8, 3, .2, 4, blockMat],
+        [8, 5.1, 11.5, 10, .2, 3, blockMat],
     ];
-
 
 for (let i = 0; i < blockDims.length; i++) {
     groundFloorBlocks.push(makeBlock(blockDims[i][0], blockDims[i][1], blockDims[i][2], blockDims[i][3], blockDims[i][4], blockDims[i][5], blockDims[i][6], false));
@@ -143,17 +189,19 @@ log("Creating ground floor walls...");
 
 const groundFloorWalls = [];
 
+uilog("--------------"+lobbyDoorGlass1.a);
+
 let groundFloorWallDims =
     [
-        [5, 1.9, 3.05, 4, 3.7, .1, blockMat, true],
-        [11, 1.9, 3.05, 4, 3.7, .1, blockMat, true],
-        [5, 1.9, 12.95, 4, 3.7, .1, blockMat, true],
-        [11, 1.9, 12.95, 4, 3.7, .1, blockMat, true],
+        [5, 3, 3.05, 4, 4, .1, glassWall, true],
+        [11, 3, 3.05, 4, 4, .1, glassWall, true],
+        [5, 3, 12.95, 4, 4, .1, glassWall, true],
+        [11, 3, 12.95, 4, 4, .1, glassWall, true],
 
-        [5, 1.9, 3.05, 4, 3.7, .1, blockMat, false],
-        [11, 1.9, 3.05, 4, 3.7, .1, blockMat, false],
-        [5, 1.9, 12.95, 4, 3.7, .1, blockMat, false],
-        [11, 1.9, 12.95, 4, 3.7, .1, blockMat, false],
+        [5, 3, 3.05, 4, 4, .1, glassWall, false],
+        [11, 3, 3.05, 4, 4, .1, glassWall, false],
+        [5, 3, 12.95, 4, 4, .1, glassWall, false],
+        [11, 3, 12.95, 4, 4, .1, glassWall, false]
     ];
 
 for (let i = 0; i < groundFloorWallDims.length; i++) {
@@ -169,10 +217,10 @@ log("Lobby doors being made...");
 
 
 let doorMan = new Doors();
-const greenDoor = doorMan.newFlippyDoor(2, 3, 8, 2.25, 3.025, metalDkStlMat, greenMetalTrimMat, false); // S
-const goldDoor = doorMan.newFlippyDoor(2, 3, 8, 2.25, 12.975, metalDkStlMat, greenMetalTrimMat, false); // N
-const redDoor = doorMan.newFlippyDoor(2, 3, 3.025, 2.25, 8, metalDkStlMat, greenMetalTrimMat, true); // W
-const blueDoor = doorMan.newFlippyDoor(2, 3, 12.975, 2.25, 8, metalDkStlMat, greenMetalTrimMat, true); // E
+const greenDoor = doorMan.newFlippyDoor(2, 4, 8, 3, 3.025, metalDkStlMat, greenMetalTrimMat, false); // S
+const goldDoor = doorMan.newFlippyDoor(2, 4, 8, 3, 12.975, metalDkStlMat, greenMetalTrimMat, false); // N
+const redDoor = doorMan.newFlippyDoor(2, 4, 3.025, 3, 8, metalDkStlMat, greenMetalTrimMat, true); // W
+const blueDoor = doorMan.newFlippyDoor(2, 4, 12.975, 3, 8, metalDkStlMat, greenMetalTrimMat, true); // E
 log("Lobby doors complete.");
 
 const groundFloorBridges = [];
@@ -214,9 +262,7 @@ let elGo = false;
 let elInc = .04;
 let camera = Camera.instance;
 let camiFeet = camera.feetPosition;
-const canvas = new UICanvas();
-const hudText = new UIText(canvas);
-hudText.fontAutoSize = true;
+
 
 let elLowStop = 1.4;
 let guestFloors = 0;
@@ -397,11 +443,15 @@ let elLiteDimmer = 1;
 
 let updateCycle = 3;
 let updnow = 0;
-export class ElIndicaSystem implements ISystem {
-    update(dt: number) {
+
+export class LobbyElCycle implements ISystem {
+    update(dt: number)
+    {
 
         if(updnow >= updateCycle)
         {
+
+
             if (camiFeet.x > 5 && camiFeet.x < 11 && camiFeet.z > 5 && camiFeet.z < 11)
             {
                 glassGreen.albedoColor = greenBrt;
@@ -433,12 +483,6 @@ export class ElIndicaSystem implements ISystem {
             }
             else
             {
-                if(colorRatio != .4)
-                {
-                    colorRatio = .4;
-
-                }
-
                 glassGreen.albedoColor = greenDim;
                 glassRed.albedoColor = redDim;
             }
@@ -448,7 +492,7 @@ export class ElIndicaSystem implements ISystem {
     }
 }
 
-engine.addSystem(new ElIndicaSystem());
+engine.addSystem(new LobbyElCycle());
 
 
 //engine.addEntity(myEntity);
