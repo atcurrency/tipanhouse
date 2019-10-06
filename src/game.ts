@@ -1,42 +1,9 @@
 import utils from "../node_modules/decentraland-ecs-utils/index"
 
 import {Elevator} from "../sysponents/elevator";
+import {Mats} from "../sysponents/materials";
 import {Doors} from "../sysponents/doors";
 
-// entity creators
-log("Material creation functions loading...");
-
-function makeMaterial(hexcolor, metallic, roughness) {
-    const material = new Material()
-    material.albedoColor = Color3.FromHexString(hexcolor); // todo: check for # symbol and handle
-    material.metallic = metallic
-    material.roughness = roughness;
-    return material;
-}
-
-log("Material creation functions loaded.");
-
-let greenGlowMat = makeMaterial("#00AA00", .4, .7);
-let redGlowMat = makeMaterial("#AA0000", .4, .7);
-let metalDkStlMat = makeMaterial("#a09ca1", .9, .3);
-let blockMat = makeMaterial("#ccc4a4", 0.2, .5);
-let ceilingMat = makeMaterial("#ccc7ab", 0.2, .5);
-let bridgeMat = makeMaterial("#4d3734", 0.2, .5);
-const greenMetalMat = makeMaterial("#138326", .9, .1);
-const goldMetalMat = makeMaterial("#bfb017", .9, .2);
-const darkMetalMat = makeMaterial("#747051", .9, .2);
-const redMetalMat = makeMaterial("#830000", .9, .1);
-const blueMetalMat = makeMaterial("#0c1e83", .9, .1);
-let greenMetalTrimMat = makeMaterial("#2f5d31", .9, .0);
-
-//guest floor
-const poolDoorMaterial = makeMaterial("#386483", .9, .1);
-const hotTubDoorMaterial = makeMaterial("#831a13", .9, .1);
-const suiteDoorMaterial = makeMaterial("#341b1a", .6, .7);
-const suiteFloorMaterial = makeMaterial("#c2ac94", .1, .7);
-const suiteWallMaterial = makeMaterial("#aea990", .1, .7);
-const bedMat = makeMaterial("#c1a586", 0, .7);
-const couchMat = makeMaterial("#aea990", 0, .7);
 const canvas = new UICanvas();
 const message = new UIText(canvas);
 message.fontSize = 15;
@@ -51,66 +18,17 @@ function uilog(msg)
     message.value = msg;
 }
 
-function color4HexAlpha(hcolor, alpha)
-{
-    let r = 0;
-    let g = 0;
-    let b = 0;
+// entity creators
+log("Material creation functions loading...");
 
-    let colors = [];
-    if(hcolor.length === 6)
-    {
-        colors[0] = parseInt("0x"+hcolor.substring(0,1));
-        colors[1] = parseInt("0x"+hcolor.substring(2,3));
-        colors[2] = parseInt("0x"+hcolor.substring(4,5));
-
-    }
-    else if(hcolor.length === 7)
-    {
-        colors[0] = parseInt("0x"+hcolor.substring(1,2));
-        colors[1] = parseInt("0x"+hcolor.substring(3,4));
-        colors[2] = parseInt("0x"+hcolor.substring(5,6));
-    }
-
-    r = colors[0]/16;
-    g = colors[1]/16;
-    b = colors[2]/16;
-
-    let newColor = new Color4(r,g,b,alpha);
-    return newColor;
-}
-
-const lobbyDoorGlass1 = color4HexAlpha("#305d32",.5);
-let glassWall = new Material();
-glassWall.transparencyMode = 2;
-glassWall.albedoColor = lobbyDoorGlass1;
-glassWall.metallic = .9;
-glassWall.roughness = .2;
-
-const greenDim = new Color4(.1,.5, .1, .3);
-const greenBrt = new Color4(.4,1, .4, .6);
-
-const redDim = new Color4(.5,.1, .1, .3);
-const redBrt = new Color4(1,.4, .4, .6);
-
-const glassGreen = new Material();
-glassGreen.transparencyMode = 2;
-glassGreen.albedoColor = greenDim;
-glassGreen.metallic = .2;
-glassGreen.roughness = .6;
-
-const glassRed = new Material();
-glassRed.transparencyMode = 2;
-glassRed.albedoColor = redDim;
-glassRed.metallic = .2;
-glassRed.roughness = .6;
-
-
+let mats = new Mats();
 
 log("Building functions loading...");
 
-function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest) {
-    if (optEastWest) {
+function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest)
+{
+    if (optEastWest)
+    {
         let tcpx = cpx;
         let tsx = sx;
         cpx = cpz;
@@ -120,6 +38,7 @@ function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest) {
     }
     const newblock = new Entity();
     newblock.addComponent(new Transform(
+
         {
             position: new Vector3(cpx, cpy, cpz),
             scale: new Vector3(sx, sy, sz)
@@ -127,11 +46,15 @@ function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest) {
     newblock.addComponent(new BoxShape());
     engine.addEntity(newblock);
 
-    if (optMaterial) {
-        try {
+    if (optMaterial)
+    {
+        try
+        {
             newblock.addComponent(optMaterial);
-        } catch {
-            // log error
+        }
+        catch(e)
+        {
+            log(e);
         }
     }
 
@@ -140,23 +63,49 @@ function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest) {
 
 log("Building functions loaded");
 
+
 log("Filling lobby fountain pool...");
-const grassMat = makeMaterial("#26583c", .9, .6);
+const grassMat = mats.makeMaterial("#26583c", .9, .6);
 let floor = makeBlock(8, 0.005, 8, 16, .01, 16, grassMat, false);
 log("Lobby fountain filled.");
 
 log("Lobby fountain water creation...");
 
-const blueWaterColor = new Color4(.1,.4, .7, .6);
-const blueWater = new Material();
-blueWater.transparencyMode = 2;
-blueWater.albedoColor = blueWaterColor;
-blueWater.metallic = .2;
-blueWater.roughness = .6;
+const blueWaterColor = new Color4(0,0, .3, .6);
+const blueWater = mats.makeMaterialColor4(blueWaterColor,.2, .6);
+const blueWaterColor2 = new Color4(.1,.4, .7, .6);
+const blueWater2 = mats.makeMaterialColor4(blueWaterColor2,.2,.6);
 
-let lobbyWaterFound = makeBlock(8, .2, 8, 4, .1, 4, goldMetalMat, false);
-let lobbyWater = makeBlock(8, .4, 8, 4, .4, 4, blueWater, false);
+//let lobbyWaterFound = makeBlock(8, .2, 8, 4, .1, 4, mats.goldMetalMat, false);
+//let lobbyWater = makeBlock(8, .4, 8, 4, .4, 4, blueWater, false);
 
+
+function waterstack(bottomX, bottomY, bottomZ, topX, topY, topZ, layers, columns)
+{
+    let waterstack = [];
+
+    let layerDepth = (topX - bottomX) / layers ;
+    let colWidth = (topZ - bottomZ) / columns;
+    let halfWit = colWidth/2;
+    let halfScoop = layerDepth/2;
+    let halfDep = (topY - bottomY) /2;
+
+    for(let x = bottomX; x < topX; x+= colWidth)
+    {
+        for(let y = bottomY; y < topY; y+= layerDepth)
+        {
+            if(y/2 === 0)
+            {
+                waterstack[x][y] = makeBlock(bottomX + (halfScoop*x), bottomZ + (halfWit*x), bottomY + halfDep, layerDepth, colWidth, halfDep*2, blueWater, false);
+            }
+            else
+            {
+                waterstack[x][y] = makeBlock(bottomX + (halfScoop*x), bottomZ + (halfWit*x), bottomY + halfDep, layerDepth, colWidth, halfDep*2, blueWater2, false);
+            }
+         }
+    }
+    return waterstack;
+}
 
 log("Lobby fountain water complete...");
 
@@ -166,20 +115,21 @@ const groundFloorBlocks = [];
 
 let blockDims =
     [
-        [8, .5, 4.5, 10, 1, 3, blockMat], //main floor blocks
-        [4.5, .5, 8, 3, 1, 4, blockMat],
-        [11.5, .5, 8, 3, 1, 4, blockMat],
-        [8, .5, 11.5, 10, 1, 3, blockMat],
+        [8, .5, 4.5, 10, 1, 3, mats.blockMat], //main floor blocks
+        [4.5, .5, 8, 3, 1, 4, mats.blockMat],
+        [11.5, .5, 8, 3, 1, 4, mats.blockMat],
+        [8, .5, 11.5, 10, 1, 3, mats.blockMat],
 
-        [8, 1.25, 8, 2, .25, 2, blockMat], // el platform
+        [8, 1.25, 8, 2, .25, 2, mats.blockMat], // el platform
 
-        [8, 5.1, 4.5, 10, .2, 3, blockMat], // main floor ceiling
-        [4.5, 5.1, 8, 3, .2, 4, blockMat], //
-        [11.5, 5.1, 8, 3, .2, 4, blockMat],
-        [8, 5.1, 11.5, 10, .2, 3, blockMat],
+        [8, 5.1, 4.5, 10, .2, 3, mats.glassWall], // main floor ceiling
+        [4.5, 5.1, 8, 3, .2, 4, mats.glassWall], //
+        [11.5, 5.1, 8, 3, .2, 4, mats.glassWall],
+        [8, 5.1, 11.5, 10, .2, 3, mats.glassWall],
     ];
 
-for (let i = 0; i < blockDims.length; i++) {
+for (let i = 0; i < blockDims.length; i++)
+{
     groundFloorBlocks.push(makeBlock(blockDims[i][0], blockDims[i][1], blockDims[i][2], blockDims[i][3], blockDims[i][4], blockDims[i][5], blockDims[i][6], false));
 }
 
@@ -189,22 +139,22 @@ log("Creating ground floor walls...");
 
 const groundFloorWalls = [];
 
-uilog("--------------"+lobbyDoorGlass1.a);
 
 let groundFloorWallDims =
     [
-        [5, 3, 3.05, 4, 4, .1, glassWall, true],
-        [11, 3, 3.05, 4, 4, .1, glassWall, true],
-        [5, 3, 12.95, 4, 4, .1, glassWall, true],
-        [11, 3, 12.95, 4, 4, .1, glassWall, true],
+        [5, 3, 3.05, 4, 4, .1, mats.glassWall, true],
+        [11, 3, 3.05, 4, 4, .1, mats.glassWall, true],
+        [5, 3, 12.95, 4, 4, .1, mats.glassWall, true],
+        [11, 3, 12.95, 4, 4, .1, mats.glassWall, true],
 
-        [5, 3, 3.05, 4, 4, .1, glassWall, false],
-        [11, 3, 3.05, 4, 4, .1, glassWall, false],
-        [5, 3, 12.95, 4, 4, .1, glassWall, false],
-        [11, 3, 12.95, 4, 4, .1, glassWall, false]
+        [5, 3, 3.05, 4, 4, .1, mats.glassWall, false],
+        [11, 3, 3.05, 4, 4, .1, mats.glassWall, false],
+        [5, 3, 12.95, 4, 4, .1, mats.glassWall, false],
+        [11, 3, 12.95, 4, 4, .1, mats.glassWall, false]
     ];
 
-for (let i = 0; i < groundFloorWallDims.length; i++) {
+for (let i = 0; i < groundFloorWallDims.length; i++)
+{
     groundFloorWalls.push(makeBlock(groundFloorWallDims[i][0], groundFloorWallDims[i][1], groundFloorWallDims[i][2], groundFloorWallDims[i][3], groundFloorWallDims[i][4], groundFloorWallDims[i][5], groundFloorWallDims[i][6], groundFloorWallDims[i][7]));
 }
 
@@ -217,20 +167,20 @@ log("Lobby doors being made...");
 
 
 let doorMan = new Doors();
-const greenDoor = doorMan.newFlippyDoor(2, 4, 8, 3, 3.025, metalDkStlMat, greenMetalTrimMat, false); // S
-const goldDoor = doorMan.newFlippyDoor(2, 4, 8, 3, 12.975, metalDkStlMat, greenMetalTrimMat, false); // N
-const redDoor = doorMan.newFlippyDoor(2, 4, 3.025, 3, 8, metalDkStlMat, greenMetalTrimMat, true); // W
-const blueDoor = doorMan.newFlippyDoor(2, 4, 12.975, 3, 8, metalDkStlMat, greenMetalTrimMat, true); // E
+const greenDoor = doorMan.newFlippyDoor(2, 4, 8, 3, 3.025, mats.lobbyDoor, mats.greenMetalTrimMat, false); // S
+const goldDoor = doorMan.newFlippyDoor(2, 4, 8, 3, 12.975, mats.lobbyDoor, mats.greenMetalTrimMat, false); // N
+const redDoor = doorMan.newFlippyDoor(2, 4, 3.025, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // W
+const blueDoor = doorMan.newFlippyDoor(2, 4, 12.975, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // E
 log("Lobby doors complete.");
 
 const groundFloorBridges = [];
 let bridgeDims =
     [
-        [6.25, .9, 8, .5, .1, .5, bridgeMat],
-        [6.75, 1.2, 8, .5, .1, .5, bridgeMat],
+        [6.25, .9, 8, .5, .1, .5, mats.bridgeMat],
+        [6.75, 1.2, 8, .5, .1, .5, mats.bridgeMat],
 
-        [9.25, 1.2, 8, .5, .1, .5, bridgeMat],
-        [9.75, .9, 8, .5, .1, .5, bridgeMat],
+        [9.25, 1.2, 8, .5, .1, .5, mats.bridgeMat],
+        [9.75, .9, 8, .5, .1, .5, mats.bridgeMat],
     ];
 
 for (let i = 0; i < bridgeDims.length; i++) {
@@ -242,10 +192,10 @@ const outsideStairs = [];
 let oustideStairDims = [];
 
 for (let x = 0; x < 1.2; x += .4) {
-    oustideStairDims.push([2 + x, x * .75, 8, .5, .1, 2, bridgeMat]);
-    oustideStairDims.push([14 - x, x * .75, 8, .5, .1, 2, bridgeMat]);
-    oustideStairDims.push([8, x * .75, 2 + x, 2, .1, .5, bridgeMat]);
-    oustideStairDims.push([8, x * .75, 14 - x, 2, .1, .5, bridgeMat]);
+    oustideStairDims.push([2 + x, x * .75, 8, .5, .1, 2, mats.bridgeMat]);
+    oustideStairDims.push([14 - x, x * .75, 8, .5, .1, 2, mats.bridgeMat]);
+    oustideStairDims.push([8, x * .75, 2 + x, 2, .1, .5, mats.bridgeMat]);
+    oustideStairDims.push([8, x * .75, 14 - x, 2, .1, .5, mats.bridgeMat]);
 
 }
 
@@ -256,7 +206,7 @@ for (let i = 0; i < oustideStairDims.length; i++) {
 // end outside stairs
 
 // el platform
-let lplat = makeBlock(8, 1.5, 8, 2, .125, 2, darkMetalMat, false);
+let lplat = makeBlock(8, 1.5, 8, 2, .125, 2, mats.darkMetalMat, false);
 let elDir = 1;
 let elGo = false;
 let elInc = .04;
@@ -308,16 +258,16 @@ function makeNewGuestFloor() {
     const guestFloorBlocks = [];
     let guestFloorDims =
         [
-            [8, newFloorY, 4.5, 10, .5, 5, suiteFloorMaterial], //guest floor blocks
-            [8, newFloorY, 11.5, 10, .5, 5, suiteFloorMaterial],
+            [8, newFloorY, 4.5, 10, .5, 5, mats.suiteFloorMaterial], //guest floor blocks
+            [8, newFloorY, 11.5, 10, .5, 5, mats.suiteFloorMaterial],
 
-            [5, newFloorY, 8, 4, .5, 2, suiteFloorMaterial],
-            [11, newFloorY, 8, 4, .5, 2, suiteFloorMaterial],
+            [5, newFloorY, 8, 4, .5, 2, mats.suiteFloorMaterial],
+            [11, newFloorY, 8, 4, .5, 2, mats.suiteFloorMaterial],
 
-            [2, newFloorY, 8, 2, .5, 14, suiteFloorMaterial], //patio floor blocks
-            [14, newFloorY, 8, 2, .5, 14, suiteFloorMaterial],
-            [8, newFloorY, 2, 12, .5, 2, suiteFloorMaterial],
-            [8, newFloorY, 14, 12, .5, 2, suiteFloorMaterial],
+            [2, newFloorY, 8, 2, .5, 14, mats.suiteFloorMaterial], //patio floor blocks
+            [14, newFloorY, 8, 2, .5, 14, mats.suiteFloorMaterial],
+            [8, newFloorY, 2, 12, .5, 2, mats.suiteFloorMaterial],
+            [8, newFloorY, 14, 12, .5, 2, mats.suiteFloorMaterial],
 
         ];
     for (let i = 0; i < guestFloorDims.length; i++) {
@@ -328,27 +278,27 @@ function makeNewGuestFloor() {
 
     let guestWallDims =
         [
-            [8, newDoorSy, 9.95, 4, 3, .1, blockMat, false], // lobby
-            [8, newDoorSy, 6.05, 4, 3, .1, blockMat, false],
+            [8, newDoorSy, 9.95, 4, 3, .1, mats.blockMat, false], // lobby
+            [8, newDoorSy, 6.05, 4, 3, .1, mats.blockMat, false],
 
-            [6, newDoorSy, 6.5, .1, 3, 1, blockMat, false],
-            [6, newDoorSy, 9.5, .1, 3, 1, blockMat, false],
-            [10, newDoorSy, 6.5, .1, 3, 1, blockMat, false],
-            [10, newDoorSy, 9.5, .1, 3, 1, blockMat, false],
+            [6, newDoorSy, 6.5, .1, 3, 1, mats.blockMat, false],
+            [6, newDoorSy, 9.5, .1, 3, 1, mats.blockMat, false],
+            [10, newDoorSy, 6.5, .1, 3, 1, mats.blockMat, false],
+            [10, newDoorSy, 9.5, .1, 3, 1, mats.blockMat, false],
 
-            [8, newFloorY + .5, 1.05, 14, 1, .1, blockMat, false], //rails
-            [8, newFloorY + .5, 14.95, 14, 1, .1, blockMat, false],
-            [1.05, newFloorY + .5, 8, .1, 1, 14, blockMat, false],
-            [14.95, newFloorY + .5, 8, .1, 1, 14, blockMat, false],
+            [8, newFloorY + .5, 1.05, 14, 1, .1, mats.blockMat, false], //rails
+            [8, newFloorY + .5, 14.95, 14, 1, .1, mats.blockMat, false],
+            [1.05, newFloorY + .5, 8, .1, 1, 14, mats.blockMat, false],
+            [14.95, newFloorY + .5, 8, .1, 1, 14, mats.blockMat, false],
 
 
-            [6, newDoorSy, 13, .1, 3, 2, blockMat, false],
-            [8, newDoorSy, 13.95, 4, 3, .1, blockMat, false],
-            [10, newDoorSy, 13, .1, 3, 2, blockMat, false],
+            [6, newDoorSy, 13, .1, 3, 2, mats.blockMat, false],
+            [8, newDoorSy, 13.95, 4, 3, .1, mats.blockMat, false],
+            [10, newDoorSy, 13, .1, 3, 2, mats.blockMat, false],
 
-            [11, newFloorY + .75, 3.5, 4, 1, 2.5, bedMat, false], //bed
+            [11, newFloorY + .75, 3.5, 4, 1, 2.5, mats.bedMat, false], //bed
 
-            [4.5, newFloorY + .5, 2.5, 5, 1, 1, couchMat, false], //couch
+            [4.5, newFloorY + .5, 2.5, 5, 1, 1, mats.couchMat, false], //couch
 
         ];
 
@@ -364,8 +314,8 @@ let onClickAddFloor = new OnClick(e => {
     elGo = true;
     makeNewGuestFloor();
 });
-let addFloorButton1 = makeBlock(6, 2.2, 7, .1, .4, .3, goldMetalMat, false);
-let addFloorButton2 = makeBlock(10, 2.2, 9, .1, .4, .3, goldMetalMat, false);
+let addFloorButton1 = makeBlock(6, 2.2, 7, .1, .4, .3, mats.goldMetalMat, false);
+let addFloorButton2 = makeBlock(10, 2.2, 9, .1, .4, .3, mats.goldMetalMat, false);
 addFloorButton1.addComponentOrReplace(onClickAddFloor);
 addFloorButton2.addComponentOrReplace(onClickAddFloor);
 
@@ -374,8 +324,8 @@ let clickCallEl = new OnClick(e => {
     elDir = -1;
     elGo = true;
 });
-let callElButton1 = makeBlock(6, 2.2, 7.5, .1, .4, .3, darkMetalMat, false);
-let callElButton2 = makeBlock(10, 2.2, 8.5, .1, .4, .3, darkMetalMat, false);
+let callElButton1 = makeBlock(6, 2.2, 7.5, .1, .4, .3, mats.darkMetalMat, false);
+let callElButton2 = makeBlock(10, 2.2, 8.5, .1, .4, .3, mats.darkMetalMat, false);
 callElButton1.addComponentOrReplace(clickCallEl);
 callElButton2.addComponentOrReplace(clickCallEl);
 
@@ -393,9 +343,9 @@ function onEl() {
 
 let colorRatio = 0;
 
-let uprrow = makeBlock(.42, 15, .42, .1, 4, .1, glassGreen, false);
-let ucap1 = makeBlock(.42, 12.5, .42, .1, 1, .1, metalDkStlMat, false);
-let ucap2 = makeBlock(.42, 17.5, .42, .1, 1, .1, metalDkStlMat, false);
+let uprrow = makeBlock(.42, 15, .42, .1, 4, .1, mats.glassGreen, false);
+let ucap1 = makeBlock(.42, 12.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
+let ucap2 = makeBlock(.42, 17.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
 uprrow.setParent(lplat);
 ucap1.setParent(lplat);
 ucap2.setParent(lplat);
@@ -408,7 +358,7 @@ let clickUprrow = new OnClick(e => {
 uprrow.addComponentOrReplace(clickUprrow);
 engine.addEntity(uprrow);
 
-let stopel = makeBlock(.42, 10, .42, .1, 4, .1, darkMetalMat, false);
+let stopel = makeBlock(.42, 10, .42, .1, 4, .1, mats.darkMetalMat, false);
 stopel.setParent(lplat);
 let clickStop = new OnClick(e => {
     if (onEl()) {
@@ -419,9 +369,9 @@ stopel.addComponentOrReplace(clickStop);
 engine.addEntity(stopel);
 
 
-let downrrow = makeBlock(.42, 5, .42, .1, 4, .1, glassRed, false);
-let dcap1 = makeBlock(.42, 2.5, .42, .1, 1, .1, metalDkStlMat, false);
-let dcap2 = makeBlock(.42, 7.5, .42, .1, 1, .1, metalDkStlMat, false);
+let downrrow = makeBlock(.42, 5, .42, .1, 4, .1, mats.glassRed, false);
+let dcap1 = makeBlock(.42, 2.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
+let dcap2 = makeBlock(.42, 7.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
 downrrow.setParent(lplat);
 dcap1.setParent(lplat);
 dcap2.setParent(lplat);
@@ -454,8 +404,8 @@ export class LobbyElCycle implements ISystem {
 
             if (camiFeet.x > 5 && camiFeet.x < 11 && camiFeet.z > 5 && camiFeet.z < 11)
             {
-                glassGreen.albedoColor = greenBrt;
-                glassRed.albedoColor = redBrt;
+                mats.glassGreen.albedoColor = mats.greenBrt;
+                mats.glassRed.albedoColor = mats.redBrt;
 
                 if(!onEl())
                 {
@@ -483,8 +433,8 @@ export class LobbyElCycle implements ISystem {
             }
             else
             {
-                glassGreen.albedoColor = greenDim;
-                glassRed.albedoColor = redDim;
+                mats.glassGreen.albedoColor = mats.greenDim;
+                mats.glassRed.albedoColor = mats.redDim;
             }
             updnow = 0;
         }

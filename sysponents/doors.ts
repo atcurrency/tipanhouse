@@ -26,27 +26,28 @@ export class Doors {
         let dooeAxleCyl = new BoxShape();
         doorAxle.addComponent(axleMaterial);
         doorAxle.addComponent(new Transform({
-            position: new Vector3(0, 0, 0.2),
-            scale: new Vector3(.1, .98, 2)
+            position: new Vector3(0, 0, 0.15),
+            scale: new Vector3(.1, .98, .1)
         }));
-        doorAxle.addComponent(dooeAxleCyl);
-        doorAxle.setParent(door);
+      //  doorAxle.addComponent(dooeAxleCyl);
+      //  doorAxle.setParent(door);
 
         let doorTop = new Entity();
         let dooeTrimBox = new BoxShape();
         doorTop.addComponent(axleMaterial);
         doorTop.addComponent(new Transform({
-            position: new Vector3(0, .452, 0.2),
-            scale: new Vector3(.98, .1, 2)
+            position: new Vector3(0, .452, 0.15),
+            scale: new Vector3(.98, .1, .1)
         }));
-        doorTop.addComponent(dooeTrimBox);
-        doorTop.setParent(door);
+      //  doorTop.addComponent(dooeTrimBox);
+     //   doorTop.setParent(door);
 
         door.addComponent(material);
         engine.addEntity(door);
 
         const doorPivot = new Entity();
         doorPivot.addComponent(new Transform(
+
             {
                 position: new Vector3(locx, locy, locz),
                 rotation: startOpen ? openPos : closedPos
@@ -61,7 +62,9 @@ export class Doors {
                 (
                     new utils.RotateTransformComponent(doorPivot.getComponent(Transform).rotation, openPos, 0.5)
                 )
-            } else {
+            }
+            else
+            {
                 doorPivot.addComponentOrReplace
                 (
                     new utils.RotateTransformComponent(doorPivot.getComponent(Transform).rotation, closedPos, 0.5)
@@ -70,7 +73,8 @@ export class Doors {
             door.addComponentOrReplace(material); // losing texture on door open
         }));
 
-        let onClickDoor = new OnClick(e => {
+        let onClickDoor = new OnClick(e =>
+        {
             door.getComponent(utils.ToggleComponent).toggle()
         });
 
