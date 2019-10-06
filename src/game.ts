@@ -13,8 +13,7 @@ message.vAlign = 'bottom';
 message.positionX = -80;
 
 
-function uilog(msg)
-{
+function uilog(msg) {
     message.value = msg;
 }
 
@@ -25,20 +24,9 @@ let mats = new Mats();
 
 log("Building functions loading...");
 
-function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest)
-{
-    if (optEastWest)
-    {
-        let tcpx = cpx;
-        let tsx = sx;
-        cpx = cpz;
-        sx = sz;
-        cpz = tcpx;
-        sz = tsx;
-    }
+function makeBlock(cpx, cpy, cpz, sx, sy, sz, material) {
     const newblock = new Entity();
     newblock.addComponent(new Transform(
-
         {
             position: new Vector3(cpx, cpy, cpz),
             scale: new Vector3(sx, sy, sz)
@@ -46,14 +34,10 @@ function makeBlock(cpx, cpy, cpz, sx, sy, sz, optMaterial, optEastWest)
     newblock.addComponent(new BoxShape());
     engine.addEntity(newblock);
 
-    if (optMaterial)
-    {
-        try
-        {
-            newblock.addComponent(optMaterial);
-        }
-        catch(e)
-        {
+    if (material) {
+        try {
+            newblock.addComponent(material);
+        } catch (e) {
             log(e);
         }
     }
@@ -66,46 +50,39 @@ log("Building functions loaded");
 
 log("Filling lobby fountain pool...");
 const grassMat = mats.makeMaterial("#26583c", .9, .6);
-let floor = makeBlock(8, 0.005, 8, 16, .01, 16, grassMat, false);
+let floor = makeBlock(8, 0.005, 8, 16, .01, 16, grassMat);
 log("Lobby fountain filled.");
 
 log("Lobby fountain water creation...");
 
-const blueWaterColor = new Color4(0,0, .3, .6);
-const blueWater = mats.makeMaterialColor4(blueWaterColor,.2, .6);
-const blueWaterColor2 = new Color4(.1,.4, .7, .6);
-const blueWater2 = mats.makeMaterialColor4(blueWaterColor2,.2,.6);
+const blueWaterColor = new Color4(0, 0, .3, .6);
+const blueWater = mats.makeMaterialColor4(blueWaterColor, .2, .6);
+const blueWaterColor2 = new Color4(.1, .4, .7, .6);
+const blueWater2 = mats.makeMaterialColor4(blueWaterColor2, .2, .6);
 
-//let lobbyWaterFound = makeBlock(8, .2, 8, 4, .1, 4, mats.goldMetalMat, false);
-//let lobbyWater = makeBlock(8, .4, 8, 4, .4, 4, blueWater, false);
+let lobbyWaterFound = makeBlock(8, .2, 8, 4, .1, 4, mats.blueMetalMat);
+
+//let lobbyWater = makeBlock(8, .4, 8, 4, .4, 4, blueWater);
 
 
-function waterstack(bottomX, bottomY, bottomZ, topX, topY, topZ, layers, columns)
-{
+function waterstack(bottomX, bottomY, bottomZ, topX, topY, topZ, numColumns) {
     let waterstack = [];
+    let sizeX = topX - bottomY;
+    let sizeZ = topY - bottomZ;
+    let sizeY = topY - bottomY;
+    let halfX = ((topX - bottomX) / 2) + bottomX;
+    let halfY = ((topY - bottomY) / 2) + bottomY;
+    let halfZ = ((topZ - bottomZ) / 2) + bottomZ;
 
-    let layerDepth = (topX - bottomX) / layers ;
-    let colWidth = (topZ - bottomZ) / columns;
-    let halfWit = colWidth/2;
-    let halfScoop = layerDepth/2;
-    let halfDep = (topY - bottomY) /2;
-
-    for(let x = bottomX; x < topX; x+= colWidth)
-    {
-        for(let y = bottomY; y < topY; y+= layerDepth)
-        {
-            if(y/2 === 0)
-            {
-                waterstack[x][y] = makeBlock(bottomX + (halfScoop*x), bottomZ + (halfWit*x), bottomY + halfDep, layerDepth, colWidth, halfDep*2, blueWater, false);
-            }
-            else
-            {
-                waterstack[x][y] = makeBlock(bottomX + (halfScoop*x), bottomZ + (halfWit*x), bottomY + halfDep, layerDepth, colWidth, halfDep*2, blueWater2, false);
-            }
-         }
+    for (let x = 0; x < numColumns; x++) {
+        waterstack[x] = makeBlock(halfX + x / numColumns, halfY, halfZ, sizeX / numColumns, sizeY, sizeZ, blueWater);
     }
+    ;
+
     return waterstack;
 }
+
+waterstack(6, .2, 6, 10, .6, 8, 16);
 
 log("Lobby fountain water complete...");
 
@@ -128,9 +105,8 @@ let blockDims =
         [8, 5.1, 11.5, 10, .2, 3, mats.glassWall],
     ];
 
-for (let i = 0; i < blockDims.length; i++)
-{
-    groundFloorBlocks.push(makeBlock(blockDims[i][0], blockDims[i][1], blockDims[i][2], blockDims[i][3], blockDims[i][4], blockDims[i][5], blockDims[i][6], false));
+for (let i = 0; i < blockDims.length; i++) {
+    groundFloorBlocks.push(makeBlock(blockDims[i][0], blockDims[i][1], blockDims[i][2], blockDims[i][3], blockDims[i][4], blockDims[i][5], blockDims[i][6]));
 }
 
 log("Ground floor complete.");
@@ -142,20 +118,19 @@ const groundFloorWalls = [];
 
 let groundFloorWallDims =
     [
-        [5, 3, 3.05, 4, 4, .1, mats.glassWall, true],
-        [11, 3, 3.05, 4, 4, .1, mats.glassWall, true],
-        [5, 3, 12.95, 4, 4, .1, mats.glassWall, true],
-        [11, 3, 12.95, 4, 4, .1, mats.glassWall, true],
+        [5, 3, 3.05, 4, 4, .1, mats.glassWall],
+        [11, 3, 3.05, 4, 4, .1, mats.glassWall],
+        [5, 3, 12.95, 4, 4, .1, mats.glassWall],
+        [11, 3, 12.95, 4, 4, .1, mats.glassWall],
 
-        [5, 3, 3.05, 4, 4, .1, mats.glassWall, false],
-        [11, 3, 3.05, 4, 4, .1, mats.glassWall, false],
-        [5, 3, 12.95, 4, 4, .1, mats.glassWall, false],
-        [11, 3, 12.95, 4, 4, .1, mats.glassWall, false]
+        [5, 3, 3.05, 4, 4, .1, mats.glassWall],
+        [11, 3, 3.05, 4, 4, .1, mats.glassWall],
+        [5, 3, 12.95, 4, 4, .1, mats.glassWall],
+        [11, 3, 12.95, 4, 4, .1, mats.glassWall]
     ];
 
-for (let i = 0; i < groundFloorWallDims.length; i++)
-{
-    groundFloorWalls.push(makeBlock(groundFloorWallDims[i][0], groundFloorWallDims[i][1], groundFloorWallDims[i][2], groundFloorWallDims[i][3], groundFloorWallDims[i][4], groundFloorWallDims[i][5], groundFloorWallDims[i][6], groundFloorWallDims[i][7]));
+for (let i = 0; i < groundFloorWallDims.length; i++) {
+    groundFloorWalls.push(makeBlock(groundFloorWallDims[i][0], groundFloorWallDims[i][1], groundFloorWallDims[i][2], groundFloorWallDims[i][3], groundFloorWallDims[i][4], groundFloorWallDims[i][5], groundFloorWallDims[i][6]));
 }
 
 
@@ -163,7 +138,6 @@ log("Ground floor walls complete");
 
 
 log("Lobby doors being made...");
-
 
 
 let doorMan = new Doors();
@@ -184,7 +158,7 @@ let bridgeDims =
     ];
 
 for (let i = 0; i < bridgeDims.length; i++) {
-    groundFloorBridges.push(makeBlock(bridgeDims[i][0], bridgeDims[i][1], bridgeDims[i][2], bridgeDims[i][3], bridgeDims[i][4], bridgeDims[i][5], bridgeDims[i][6], false));
+    groundFloorBridges.push(makeBlock(bridgeDims[i][0], bridgeDims[i][1], bridgeDims[i][2], bridgeDims[i][3], bridgeDims[i][4], bridgeDims[i][5], bridgeDims[i][6]));
 }
 
 // outside stairs
@@ -200,13 +174,13 @@ for (let x = 0; x < 1.2; x += .4) {
 }
 
 for (let i = 0; i < oustideStairDims.length; i++) {
-    outsideStairs.push(makeBlock(oustideStairDims[i][0], oustideStairDims[i][1], oustideStairDims[i][2], oustideStairDims[i][3], oustideStairDims[i][4], oustideStairDims[i][5], oustideStairDims[i][6], false));
+    outsideStairs.push(makeBlock(oustideStairDims[i][0], oustideStairDims[i][1], oustideStairDims[i][2], oustideStairDims[i][3], oustideStairDims[i][4], oustideStairDims[i][5], oustideStairDims[i][6]));
 }
 
 // end outside stairs
 
 // el platform
-let lplat = makeBlock(8, 1.5, 8, 2, .125, 2, mats.darkMetalMat, false);
+let lplat = makeBlock(8, 1.5, 8, 2, .125, 2, mats.darkMetalMat);
 let elDir = 1;
 let elGo = false;
 let elInc = .04;
@@ -247,7 +221,6 @@ function makeNewGuestFloor() {
     let newDoorSy = guestFloors * guestFloorHeight + 1.75; // 1.5 + .25 flooe height
 
 
-
 //	const elLobbylDoor = doorMan.newSlidingDoor(2, 3, 10, newDoorSy, 8, suiteDoorMaterial, 90);
 //	const elLobbyDoor = doorMan.newSlidingDoor(2, 3, 6, newDoorSy, 8, suiteDoorMaterial, 90);
 
@@ -271,39 +244,37 @@ function makeNewGuestFloor() {
 
         ];
     for (let i = 0; i < guestFloorDims.length; i++) {
-        guestFloorBlocks.push(makeBlock(guestFloorDims[i][0], guestFloorDims[i][1], guestFloorDims[i][2], guestFloorDims[i][3], guestFloorDims[i][4], guestFloorDims[i][5], guestFloorDims[i][6], false));
+        guestFloorBlocks.push(makeBlock(guestFloorDims[i][0], guestFloorDims[i][1], guestFloorDims[i][2], guestFloorDims[i][3], guestFloorDims[i][4], guestFloorDims[i][5], guestFloorDims[i][6]));
     }
 
     const guestWalls = [];
 
     let guestWallDims =
         [
-            [8, newDoorSy, 9.95, 4, 3, .1, mats.blockMat, false], // lobby
-            [8, newDoorSy, 6.05, 4, 3, .1, mats.blockMat, false],
+            [8, newDoorSy, 9.95, 4, 3, .1, mats.blockMat], // lobby
+            [8, newDoorSy, 6.05, 4, 3, .1, mats.blockMat],
 
-            [6, newDoorSy, 6.5, .1, 3, 1, mats.blockMat, false],
-            [6, newDoorSy, 9.5, .1, 3, 1, mats.blockMat, false],
-            [10, newDoorSy, 6.5, .1, 3, 1, mats.blockMat, false],
-            [10, newDoorSy, 9.5, .1, 3, 1, mats.blockMat, false],
+            [6, newDoorSy, 6.5, .1, 3, 1, mats.blockMat],
+            [6, newDoorSy, 9.5, .1, 3, 1, mats.blockMat],
+            [10, newDoorSy, 6.5, .1, 3, 1, mats.blockMat],
+            [10, newDoorSy, 9.5, .1, 3, 1, mats.blockMat],
 
-            [8, newFloorY + .5, 1.05, 14, 1, .1, mats.blockMat, false], //rails
-            [8, newFloorY + .5, 14.95, 14, 1, .1, mats.blockMat, false],
-            [1.05, newFloorY + .5, 8, .1, 1, 14, mats.blockMat, false],
-            [14.95, newFloorY + .5, 8, .1, 1, 14, mats.blockMat, false],
+            [8, newFloorY + .5, 1.05, 14, 1, .1, mats.blockMat], //rails
+            [8, newFloorY + .5, 14.95, 14, 1, .1, mats.blockMat],
+            [1.05, newFloorY + .5, 8, .1, 1, 14, mats.blockMat],
+            [14.95, newFloorY + .5, 8, .1, 1, 14, mats.blockMat],
 
 
-            [6, newDoorSy, 13, .1, 3, 2, mats.blockMat, false],
-            [8, newDoorSy, 13.95, 4, 3, .1, mats.blockMat, false],
-            [10, newDoorSy, 13, .1, 3, 2, mats.blockMat, false],
+            [6, newDoorSy, 13, .1, 3, 2, mats.blockMat],
+            [8, newDoorSy, 13.95, 4, 3, .1, mats.blockMat],
+            [10, newDoorSy, 13, .1, 3, 2, mats.blockMat],
 
-            [11, newFloorY + .75, 3.5, 4, 1, 2.5, mats.bedMat, false], //bed
-
-            [4.5, newFloorY + .5, 2.5, 5, 1, 1, mats.couchMat, false], //couch
-
-        ];
+            [11, newFloorY + .75, 3.5, 4, 1, 2.5, mats.bedMat], //bed
+            [4.5, newFloorY + .5, 2.5, 5, 1, 1, mats.couchMat] //couch
+     ];
 
     for (let i = 0; i < guestWallDims.length; i++) {
-        guestWalls.push(makeBlock(guestWallDims[i][0], guestWallDims[i][1], guestWallDims[i][2], guestWallDims[i][3], guestWallDims[i][4], guestWallDims[i][5], guestWallDims[i][6], guestWallDims[i][7]));
+        guestWalls.push(makeBlock(guestWallDims[i][0], guestWallDims[i][1], guestWallDims[i][2], guestWallDims[i][3], guestWallDims[i][4], guestWallDims[i][5], guestWallDims[i][6]));
     }
 
 }
@@ -314,8 +285,8 @@ let onClickAddFloor = new OnClick(e => {
     elGo = true;
     makeNewGuestFloor();
 });
-let addFloorButton1 = makeBlock(6, 2.2, 7, .1, .4, .3, mats.goldMetalMat, false);
-let addFloorButton2 = makeBlock(10, 2.2, 9, .1, .4, .3, mats.goldMetalMat, false);
+let addFloorButton1 = makeBlock(6, 2.2, 7, .1, .4, .3, mats.goldMetalMat);
+let addFloorButton2 = makeBlock(10, 2.2, 9, .1, .4, .3, mats.goldMetalMat);
 addFloorButton1.addComponentOrReplace(onClickAddFloor);
 addFloorButton2.addComponentOrReplace(onClickAddFloor);
 
@@ -324,8 +295,8 @@ let clickCallEl = new OnClick(e => {
     elDir = -1;
     elGo = true;
 });
-let callElButton1 = makeBlock(6, 2.2, 7.5, .1, .4, .3, mats.darkMetalMat, false);
-let callElButton2 = makeBlock(10, 2.2, 8.5, .1, .4, .3, mats.darkMetalMat, false);
+let callElButton1 = makeBlock(6, 2.2, 7.5, .1, .4, .3, mats.darkMetalMat);
+let callElButton2 = makeBlock(10, 2.2, 8.5, .1, .4, .3, mats.darkMetalMat);
 callElButton1.addComponentOrReplace(clickCallEl);
 callElButton2.addComponentOrReplace(clickCallEl);
 
@@ -343,9 +314,9 @@ function onEl() {
 
 let colorRatio = 0;
 
-let uprrow = makeBlock(.42, 15, .42, .1, 4, .1, mats.glassGreen, false);
-let ucap1 = makeBlock(.42, 12.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
-let ucap2 = makeBlock(.42, 17.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
+let uprrow = makeBlock(.42, 15, .42, .1, 4, .1, mats.glassGreen);
+let ucap1 = makeBlock(.42, 12.5, .42, .1, 1, .1, mats.metalDkStlMat);
+let ucap2 = makeBlock(.42, 17.5, .42, .1, 1, .1, mats.metalDkStlMat);
 uprrow.setParent(lplat);
 ucap1.setParent(lplat);
 ucap2.setParent(lplat);
@@ -358,7 +329,7 @@ let clickUprrow = new OnClick(e => {
 uprrow.addComponentOrReplace(clickUprrow);
 engine.addEntity(uprrow);
 
-let stopel = makeBlock(.42, 10, .42, .1, 4, .1, mats.darkMetalMat, false);
+let stopel = makeBlock(.42, 10, .42, .1, 4, .1, mats.darkMetalMat);
 stopel.setParent(lplat);
 let clickStop = new OnClick(e => {
     if (onEl()) {
@@ -369,9 +340,9 @@ stopel.addComponentOrReplace(clickStop);
 engine.addEntity(stopel);
 
 
-let downrrow = makeBlock(.42, 5, .42, .1, 4, .1, mats.glassRed, false);
-let dcap1 = makeBlock(.42, 2.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
-let dcap2 = makeBlock(.42, 7.5, .42, .1, 1, .1, mats.metalDkStlMat, false);
+let downrrow = makeBlock(.42, 5, .42, .1, 4, .1, mats.glassRed);
+let dcap1 = makeBlock(.42, 2.5, .42, .1, 1, .1, mats.metalDkStlMat);
+let dcap2 = makeBlock(.42, 7.5, .42, .1, 1, .1, mats.metalDkStlMat);
 downrrow.setParent(lplat);
 dcap1.setParent(lplat);
 dcap2.setParent(lplat);
@@ -395,44 +366,33 @@ let updateCycle = 3;
 let updnow = 0;
 
 export class LobbyElCycle implements ISystem {
-    update(dt: number)
-    {
+    update(dt: number) {
 
-        if(updnow >= updateCycle)
-        {
+        if (updnow >= updateCycle) {
 
 
-            if (camiFeet.x > 5 && camiFeet.x < 11 && camiFeet.z > 5 && camiFeet.z < 11)
-            {
+            if (camiFeet.x > 5 && camiFeet.x < 11 && camiFeet.z > 5 && camiFeet.z < 11) {
                 mats.glassGreen.albedoColor = mats.greenBrt;
                 mats.glassRed.albedoColor = mats.redBrt;
 
-                if(!onEl())
-                {
-                    if(colorRatio >= 1)
-                    {
+                if (!onEl()) {
+                    if (colorRatio >= 1) {
                         elLiteDimmer = -1;
-                    }
-                    else if(colorRatio <= 0)
-                    {
+                    } else if (colorRatio <= 0) {
                         elLiteDimmer = 1;
                     }
 
                     let ratioAdj = elLiteDimmer * elLiteTiming;
-                    addFloorButton1.getComponent(Transform).position.y += ratioAdj*.1;
-                    addFloorButton2.getComponent(Transform).position.y += ratioAdj*.1;
-                    callElButton1.getComponent(Transform).position.y += ratioAdj*.1;
-                    callElButton2.getComponent(Transform).position.y += ratioAdj*.1;
+                    addFloorButton1.getComponent(Transform).position.y += ratioAdj * .1;
+                    addFloorButton2.getComponent(Transform).position.y += ratioAdj * .1;
+                    callElButton1.getComponent(Transform).position.y += ratioAdj * .1;
+                    callElButton2.getComponent(Transform).position.y += ratioAdj * .1;
                     colorRatio += ratioAdj;
-                }
-                else
-                {
+                } else {
                     colorRatio = 1;
                 }
 
-            }
-            else
-            {
+            } else {
                 mats.glassGreen.albedoColor = mats.greenDim;
                 mats.glassRed.albedoColor = mats.redDim;
             }
