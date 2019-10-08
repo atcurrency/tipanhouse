@@ -30,26 +30,29 @@ let blox = new Blox();
 
 log("Building functions loaded");
 
-
-log("Filling lobby fountain pool...");
 const grassMat = mats.makeMaterial("#26583c", .9, .6);
 let floor = blox.makeBlock(8, 0.005, 8, 16, .01, 16, grassMat);
-log("Lobby fountain filled.");
+
+/*
+log("Lobby doors being made...");
+let doorMan = new Doors();
+doorMan.newFlippyDoor(2, 4, 8, 3, 3.025, mats.lobbyDoor, mats.greenMetalTrimMat, false); // S
+doorMan.newFlippyDoor(2, 4, 8, 3, 12.975, mats.lobbyDoor, mats.greenMetalTrimMat, false); // N
+doorMan.newFlippyDoor(2, 4, 3.025, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // W
+doorMan.newFlippyDoor(2, 4, 12.975, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // E
+log("Lobby doors complete.");
+
+ */
+
 
 log("Lobby fountain water creation...");
 
-
-
-let lobbyWaterFound = blox.makeBlock(8, .2, 8, 4, .1, 4, mats.blueMetalMat);
-
-//let lobbyWater = makeBlock(8, .4, 8, 4, .4, 4, blueWater);
-
+blox.makeBlock(8, .2, 8, 4, .1, 4, mats.blueMetalMat);
 let fount = new Fountain();
 let fountain = fount.newFountain(6, .2, 6, 10,.5, 10, 32);
 
-
-
 log("Lobby fountain water complete...");
+
 
 log("Ground floor being made...");
 
@@ -102,17 +105,9 @@ for (let i = 0; i < groundFloorWallDims.length; i++) {
 log("Ground floor walls complete");
 
 
-log("Lobby doors being made...");
 
-/*
-let doorMan = new Doors();
-doorMan.newFlippyDoor(2, 4, 8, 3, 3.025, mats.lobbyDoor, mats.greenMetalTrimMat, false); // S
-doorMan.newFlippyDoor(2, 4, 8, 3, 12.975, mats.lobbyDoor, mats.greenMetalTrimMat, false); // N
-doorMan.newFlippyDoor(2, 4, 3.025, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // W
-doorMan.newFlippyDoor(2, 4, 12.975, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // E
-log("Lobby doors complete.");
 
- */
+
 
 const groundFloorBridges = [];
 let bridgeDims =
