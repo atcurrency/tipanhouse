@@ -37,12 +37,18 @@ export class Mats {
     bridgeMat = this.makeMaterial("#4d3734", 0.2, .5);
     greenMetalMat = this.makeMaterial("#138326", .9, .1);
     goldMetalGlass = this.color4HexAlpha("#bfb017",1);
-    goldMetalMat = this.makeMaterialColor4(this.goldMetalGlass, 1, .2);
+    goldMetalMat = this.makeMaterialColor4(this.goldMetalGlass, 1, 0);
     darkMetalGlass = this.color4HexAlpha("#666234",1);
-    darkMetalMat = this.makeMaterialColor4( this.darkMetalGlass, 1, .2);
+    darkMetalMat = this.makeMaterialColor4( this.darkMetalGlass, 1, 0);
     redMetalMat = this.makeMaterial("#830000", .9, .1);
-    blueMetalMat = this.makeMaterial("#0c1e83", .9, .1);
-    greenMetalTrimMat = this.makeMaterial("#2f5d31", .9, .0);
+    aquaMetalGlass = this.color4HexAlpha("#21667a",1);
+    aquaMetalMat = this.makeMaterialColor4(this.aquaMetalGlass, 1, .11);
+    blueMetalMat = this.makeMaterial("#35e5e8", 1, .1);
+
+    greenMetalTrimGlass = this.color4HexAlpha("#254b25",1);
+    greenMetalTrimMat = this.makeMaterialColor4(this.greenMetalTrimGlass, 1, .1);
+    doorHndlMetalGlass = this.color4HexAlpha("#c8dcd3",1);
+    doorHndlMetalMat = this.makeMaterialColor4(this.doorHndlMetalGlass, 1, .1);
 
 //guest floor
     poolDoorMaterial = this.makeMaterial("#386483", .9, .1);
@@ -56,6 +62,11 @@ export class Mats {
     glassWall = this.makeMaterialColor4(this.lobbyGlass,.7,.1);
     lobbyDoorGlass = this.color4HexAlpha("#305d32",.6);
     lobbyDoor = this.makeMaterialColor4(this.lobbyGlass,1,0);
+
+    blueWaterColor = this.color4HexAlpha("#3de1ff",.33);
+    blueWater = this.makeMaterialColor4(this.blueWaterColor,1, .1);
+    blueWaterColor2 = this.color4HexAlpha("#36ffe2",.33);
+    blueWater2 = this.makeMaterialColor4(this.blueWaterColor2, 1, .1);
 
     greenDim = new Color4(.1,.5, .1, .3);
     greenBrt = new Color4(.4,1, .4, .6);

@@ -1,9 +1,10 @@
 import utils from "../node_modules/decentraland-ecs-utils/index";
+import {Mats} from "./materials";
 
 @Component("Doors")
 export class Doors {
 
-
+mats = new Mats();
     constructor() {
         //this.set(startingState)
         //if(onValueChangedCallback) this.setCallback(onValueChangedCallback)
@@ -18,32 +19,64 @@ export class Doors {
         const door = new Entity();
         door.addComponent(new Transform({
             position: new Vector3(0, 0, 0),
-            scale: new Vector3(width, height, 0.05)
+            scale: new Vector3(width*.98, height*.98, 0.05)
         }));
         door.addComponent(new BoxShape());
-
-        let doorAxle = new Entity();
-        let dooeAxleCyl = new BoxShape();
-        doorAxle.addComponent(axleMaterial);
-        doorAxle.addComponent(new Transform({
-            position: new Vector3(0, 0, 0.15),
-            scale: new Vector3(.1, .98, .1)
-        }));
-      //  doorAxle.addComponent(dooeAxleCyl);
-      //  doorAxle.setParent(door);
-
-        let doorTop = new Entity();
-        let dooeTrimBox = new BoxShape();
-        doorTop.addComponent(axleMaterial);
-        doorTop.addComponent(new Transform({
-            position: new Vector3(0, .452, 0.15),
-            scale: new Vector3(.98, .1, .1)
-        }));
-      //  doorTop.addComponent(dooeTrimBox);
-     //   doorTop.setParent(door);
-
         door.addComponent(material);
         engine.addEntity(door);
+
+        let doorTop = new Entity();
+        let doorTrimBox = new BoxShape();
+        doorTop.addComponent(axleMaterial);
+        doorTop.addComponent(new Transform({
+            position: new Vector3(0, .44, 0.36),
+            scale: new Vector3(.98, .1, .5)
+        }));
+        doorTop.addComponent(doorTrimBox);
+        doorTop.setParent(door);
+
+        let doorAxle = new Entity();
+        let doorAxleCyl = new BoxShape();
+        doorAxle.addComponent(axleMaterial);
+        doorAxle.addComponent(new Transform({
+            position: new Vector3(0, .19, 0.36),
+            scale: new Vector3(.2, .40, .5)
+        }));
+        doorAxle.addComponent(doorAxleCyl);
+        doorAxle.setParent(door);
+
+        let doorHbar = new Entity();
+        let doorH = new BoxShape();
+        doorHbar.addComponent(this.mats.doorHndlMetalMat);
+        doorHbar.addComponent(new Transform({
+            position: new Vector3(0, -.15, 0.36),
+            scale: new Vector3(.6, .1, .5)
+        }));
+        doorHbar.addComponent(doorH);
+        doorHbar.setParent(door);
+
+        let doorLegL = new Entity();
+        let doorLL = new BoxShape();
+        doorLegL.addComponent(this.mats.doorHndlMetalMat);
+        doorLegL.addComponent(new Transform({
+            position: new Vector3(-.40, -.15, 0.36),
+            scale: new Vector3(.2, .6, .5)
+        }));
+        doorLegL.addComponent(doorLL);
+        doorLegL.setParent(door);
+
+        let doorLegR = new Entity();
+        let doorLR = new BoxShape();
+        doorLegR.addComponent(this.mats.doorHndlMetalMat);
+        doorLegR.addComponent(new Transform({
+            position: new Vector3(.40, -.15, 0.36),
+            scale: new Vector3(.2, .6, .5)
+        }));
+        doorLegR.addComponent(doorLR);
+        doorLegR.setParent(door);
+
+
+
 
         const doorPivot = new Entity();
         doorPivot.addComponent(new Transform(
@@ -70,18 +103,16 @@ export class Doors {
                     new utils.RotateTransformComponent(doorPivot.getComponent(Transform).rotation, closedPos, 0.5)
                 )
             }
-            door.addComponentOrReplace(material); // losing texture on door open
         }));
 
         let onClickDoor = new OnClick(e =>
         {
-            door.getComponent(utils.ToggleComponent).toggle()
+            door.getComponent(utils.ToggleComponent).toggle();
+            door.addComponentOrReplace(material);
         });
 
         door.addComponent(onClickDoor);
 
-
-        return door;
     }
 
 
@@ -174,7 +205,6 @@ export class Doors {
             })
         );
 
-        return doorParent;
     }
 
 }
