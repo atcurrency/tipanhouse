@@ -33,6 +33,7 @@ export class Blox {
         }
         return newblock;
     };
+
     makeBlock = function(cpx, cpy, cpz, sx, sy, sz, material)
     {
         return this.makeBlockNamed(cpx, cpy, cpz, sx, sy, sz, material, "") ;

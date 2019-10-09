@@ -60,8 +60,8 @@ export class Mats {
     couchMat = this.makeMaterial("#aea990", 0, .7);
     lobbyGlass = this.color4HexAlpha("#305d32",.2);
     glassWall = this.makeMaterialColor4(this.lobbyGlass,.7,.1);
-    lobbyDoorGlass = this.color4HexAlpha("#305d32",.6);
-    lobbyDoor = this.makeMaterialColor4(this.lobbyGlass,1,0);
+    lobbyDoorGlass = this.color4HexAlpha("#305d32",.7);
+    lobbyDoor = this.makeMaterialColor4(this.lobbyDoorGlass,1,0);
 
     blueWaterColor = this.color4HexAlpha("#3de1ff",.33);
     blueWater = this.makeMaterialColor4(this.blueWaterColor,1, .1);

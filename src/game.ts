@@ -1,8 +1,8 @@
 import utils from "../node_modules/decentraland-ecs-utils/index"
 
-import {Elevator} from "../sysponents/elevator";
+import {Elevator} from "../sysponents/elevator"; // todo: move elevator from here to there
 import {Mats} from "../sysponents/materials";
-import {Doors} from "../sysponents/doors";
+import {PlainDoor} from "../sysponents/doors";
 import {Blox} from "../sysponents/blocks";
 import {Fountain} from "../sysponents/fountain";
 
@@ -33,16 +33,15 @@ log("Building functions loaded");
 const grassMat = mats.makeMaterial("#26583c", .9, .6);
 let floor = blox.makeBlock(8, 0.005, 8, 16, .01, 16, grassMat);
 
-/*
+
 log("Lobby doors being made...");
-let doorMan = new Doors();
-doorMan.newFlippyDoor(2, 4, 8, 3, 3.025, mats.lobbyDoor, mats.greenMetalTrimMat, false); // S
-doorMan.newFlippyDoor(2, 4, 8, 3, 12.975, mats.lobbyDoor, mats.greenMetalTrimMat, false); // N
-doorMan.newFlippyDoor(2, 4, 3.025, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // W
-doorMan.newFlippyDoor(2, 4, 12.975, 3, 8, mats.lobbyDoor, mats.greenMetalTrimMat, true); // E
+let lobbyDoorN = new PlainDoor(2, 4, 8, 3, 3.025, mats.lobbyDoor, true);
+let lobbyDoorS = new PlainDoor(2, 4, 8, 3, 12.975, mats.lobbyDoor, true);
+let lobbyDoorW = new PlainDoor(2, 4, 3.025, 3, 8, mats.lobbyDoor, false);
+let lobbyDoorE = new PlainDoor(2, 4, 12.975, 3, 8, mats.lobbyDoor, false);
 log("Lobby doors complete.");
 
- */
+
 
 
 log("Lobby fountain water creation...");
