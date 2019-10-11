@@ -1,13 +1,13 @@
 ![Tipan Hoouse Pre-Alpha Interior](media/interior1.png)
 ![Tipan Hoouse Pre-Alpha Exterior](media/outside1.png)
 
-Fully programmatic Decentralized hotel prototype for Decentraland. Create an entire new floor for yourself by pressing a button.
+Fully programmatic Decentralized guest house prototype for Decentraland. Create an entire new floor for yourself by pressing a button.
 
 Visit at  https://export.c15.now.sh 
 
 *Instructions:*
 
-Create a new hotel guest floor for yourself by clicking the blue button next to the elevator.  The golden button will call the elevator down if it is on an upper floor.
+Create a new guest floor for yourself by clicking the blue button next to the elevator.  The golden button will call the elevator down if it is on an upper floor.
 
 Stand on the elevator and use the up (green) or down (red) buttons to move. Use the center gold button to stop the elevator.
 
