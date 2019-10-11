@@ -5,6 +5,7 @@ import {Mats} from "../sysponents/materials";
 import {PlainDoor} from "../sysponents/doors";
 import {Blox} from "../sysponents/blocks";
 import {Fountain} from "../sysponents/fountain";
+import {GuestFloor} from "../sysponents/guestfloor";
 
 const canvas = new UICanvas();
 const message = new UIText(canvas);
@@ -64,7 +65,7 @@ let blockDims =
         [11.5, .5, 8, 3, 1, 4, mats.blockMat],
         [8, .5, 11.5, 10, 1, 3, mats.blockMat],
 
-        [8, 1.25, 8, 2, .25, 2, mats.blockMat], // el platform
+   //     [8, 1.25, 8, 2, .25, 2, mats.elBaseMat], // el platform
 
         [8, 5.1, 4.5, 10, .2, 3, mats.glassWall], // main floor ceiling
         [4.5, 5.1, 8, 3, .2, 4, mats.glassWall], //
@@ -100,13 +101,7 @@ for (let i = 0; i < groundFloorWallDims.length; i++) {
     groundFloorWalls.push(blox.makeBlock(groundFloorWallDims[i][0], groundFloorWallDims[i][1], groundFloorWallDims[i][2], groundFloorWallDims[i][3], groundFloorWallDims[i][4], groundFloorWallDims[i][5], groundFloorWallDims[i][6]));
 }
 
-
 log("Ground floor walls complete");
-
-
-
-
-
 
 const groundFloorBridges = [];
 let bridgeDims =
@@ -150,9 +145,7 @@ let camiFeet = camera.feetPosition;
 
 
 let elLowStop = 1.4;
-let guestFloors = 0;
-let guestFloorHeight = 6;
-let topOfLobby = 6.5;
+
 
 let fountainMotion = new Entity();
 let waterIdx = 0;
@@ -168,12 +161,16 @@ let waterCycle = new utils.Interval(64, () =>
 fountainMotion.addComponent(waterCycle);
 engine.addEntity(fountainMotion);
 
+let guestFloors = 0;
+let guestFloorHeight = 2.6;
+let topOfLobby = 5.5;
+let guestFloorCap = 5;
 
 let elCycle = new utils.Interval(10, () => {
     if (elGo) {
         let elTransf = lplat.getComponent(Transform);
         let elAlt = elTransf.position.y;
-        let topstop = topOfLobby + (guestFloorHeight * guestFloors);
+        let topstop = 2.7 + (guestFloorHeight * guestFloors);
         if (elAlt >= elLowStop && elAlt <= topstop) {
             let distance = Vector3.Up().scale(elDir * elInc);
             elTransf.translate(distance);
@@ -190,82 +187,31 @@ let elCycle = new utils.Interval(10, () => {
 
 lplat.addComponent(elCycle);
 
+let guestFloorsArray = [];
 
-function makeNewGuestFloor() {
-    guestFloors++;
-    let newFloorY = guestFloors * guestFloorHeight + .25;
-    let newDoorSy = guestFloors * guestFloorHeight + 1.75; // 1.5 + .25 flooe height
-
-
-//	const elLobbylDoor = doorMan.newSlidingDoor(2, 3, 10, newDoorSy, 8, suiteDoorMaterial, 90);
-//	const elLobbyDoor = doorMan.newSlidingDoor(2, 3, 6, newDoorSy, 8, suiteDoorMaterial, 90);
-
-    //doors at end of el lobby
-//	const hotDoor = doorMan.newSlidingDoor(2, 3, 10, newDoorSy, 11, hotTubDoorMaterial, 90);
-//	const coldDoor = doorMan.newSlidingDoor(2, 3, 6, newDoorSy, 11, poolDoorMaterial, 90);
-
-    const guestFloorBlocks = [];
-    let guestFloorDims =
-        [
-            [8, newFloorY, 4.5, 10, .5, 5, mats.suiteFloorMaterial], //guest floor blocks
-            [8, newFloorY, 11.5, 10, .5, 5, mats.suiteFloorMaterial],
-
-            [5, newFloorY, 8, 4, .5, 2, mats.suiteFloorMaterial],
-            [11, newFloorY, 8, 4, .5, 2, mats.suiteFloorMaterial],
-
-            [2, newFloorY, 8, 2, .5, 14, mats.suiteFloorMaterial], //patio floor blocks
-            [14, newFloorY, 8, 2, .5, 14, mats.suiteFloorMaterial],
-            [8, newFloorY, 2, 12, .5, 2, mats.suiteFloorMaterial],
-            [8, newFloorY, 14, 12, .5, 2, mats.suiteFloorMaterial],
-
-        ];
-    for (let i = 0; i < guestFloorDims.length; i++) {
-        guestFloorBlocks.push(blox.makeBlock(guestFloorDims[i][0], guestFloorDims[i][1], guestFloorDims[i][2], guestFloorDims[i][3], guestFloorDims[i][4], guestFloorDims[i][5], guestFloorDims[i][6]));
-    }
-
-    const guestWalls = [];
-
-    let guestWallDims =
-        [
-            [8, newDoorSy, 9.95, 4, 3, .1, mats.blockMat], // lobby
-            [8, newDoorSy, 6.05, 4, 3, .1, mats.blockMat],
-
-            [6, newDoorSy, 6.5, .1, 3, 1, mats.blockMat],
-            [6, newDoorSy, 9.5, .1, 3, 1, mats.blockMat],
-            [10, newDoorSy, 6.5, .1, 3, 1, mats.blockMat],
-            [10, newDoorSy, 9.5, .1, 3, 1, mats.blockMat],
-
-            [8, newFloorY + .5, 1.05, 14, 1, .1, mats.blockMat], //rails
-            [8, newFloorY + .5, 14.95, 14, 1, .1, mats.blockMat],
-            [1.05, newFloorY + .5, 8, .1, 1, 14, mats.blockMat],
-            [14.95, newFloorY + .5, 8, .1, 1, 14, mats.blockMat],
-
-
-            [6, newDoorSy, 13, .1, 3, 2, mats.blockMat],
-            [8, newDoorSy, 13.95, 4, 3, .1, mats.blockMat],
-            [10, newDoorSy, 13, .1, 3, 2, mats.blockMat],
-
-            [11, newFloorY + .75, 3.5, 4, 1, 2.5, mats.bedMat], //bed
-            [4.5, newFloorY + .5, 2.5, 5, 1, 1, mats.couchMat] //couch
-     ];
-
-    for (let i = 0; i < guestWallDims.length; i++) {
-        guestWalls.push(blox.makeBlock(guestWallDims[i][0], guestWallDims[i][1], guestWallDims[i][2], guestWallDims[i][3], guestWallDims[i][4], guestWallDims[i][5], guestWallDims[i][6]));
-    }
-
-}
-
-
+let onClickAddFloorLock = false;
 let onClickAddFloor = new OnClick(e => {
-    elDir = -1;
-    elGo = true;
-    makeNewGuestFloor();
+    if(!onClickAddFloorLock && guestFloors < guestFloorCap)
+    {
+        onClickAddFloorLock = true;
+        let oldMat = addFloorButton1.getComponent(Material);
+        let newMat = mats.aquaMetalMat;
+        addFloorButton1.addComponentOrReplace(newMat);
+        addFloorButton2.addComponentOrReplace(newMat);
+        elDir = -1;
+        elGo = true;
+        guestFloorsArray.push( new GuestFloor(guestFloors, guestFloorHeight, topOfLobby));
+        guestFloors++;
+        addFloorButton1.addComponentOrReplace(oldMat);
+        addFloorButton2.addComponentOrReplace(oldMat);
+        onClickAddFloorLock = false;
+    }
+
 });
 let addFloorButton1 = blox.makeBlock(6, 2.2, 7, .1, .4, .3, mats.goldMetalMat);
 let addFloorButton2 = blox.makeBlock(10, 2.2, 9, .1, .4, .3, mats.goldMetalMat);
 addFloorButton1.addComponentOrReplace(onClickAddFloor);
 addFloorButton2.addComponentOrReplace(onClickAddFloor);
-
 
 let clickCallEl = new OnClick(e => {
     elDir = -1;
@@ -316,7 +262,7 @@ stopel.addComponentOrReplace(clickStop);
 engine.addEntity(stopel);
 
 
-let downrrow = blox.makeBlock(.42, 5, .42, .1, 4, .1, mats.glassRed);
+let downrrow = blox.makeBlock(.42, 5, .42, .1, 4, .1, mats.glassGreen);
 let dcap1 = blox.makeBlock(.42, 2.5, .42, .1, 1, .1, mats.metalDkStlMat);
 let dcap2 = blox.makeBlock(.42, 7.5, .42, .1, 1, .1, mats.metalDkStlMat);
 downrrow.setParent(lplat);
@@ -349,7 +295,7 @@ export class LobbyElCycle implements ISystem {
         if (updnow >= updateCycle) {
 
 
-            if (camiFeet.x > 5 && camiFeet.x < 11 && camiFeet.z > 5 && camiFeet.z < 11) {
+            if (camiFeet.x > 4 && camiFeet.x < 12 && camiFeet.z > 4 && camiFeet.z < 12) {
                 mats.glassGreen.albedoColor = mats.greenBrt;
                 mats.glassRed.albedoColor = mats.redBrt;
 

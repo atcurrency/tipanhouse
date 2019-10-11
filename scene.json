@@ -1,13 +1,13 @@
 {
   "display": {
-    "title": "interactive-text",
-    "favicon": "favicon_asset"
+    "title": "Tipan House 0",
+    "favicon": ""
   },
   "contact": {
-    "name": "king of the bongo",
-    "email": ""
+    "name": "atcurrency.com",
+    "email": "c1@atcurrency.com"
   },
-  "owner": "",
+  "owner": "atcurrency.com",
   "scene": {
     "parcels": [
       "0,0"
