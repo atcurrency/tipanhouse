@@ -1,5 +1,5 @@
 ![Tipan Hoouse Pre-Alpha Interior](media/interior1.png)
-![Tipan Hoouse Pre-Alpha Exterior](media/tipanhouseoutside.png)
+![Tipan Hoouse Pre-Alpha Exterior](media/outside1.png)
 
 Fully programmatic Decentralized hotel prototype for Decentraland. Create an entire new floor for yourself by pressing a button.
 
